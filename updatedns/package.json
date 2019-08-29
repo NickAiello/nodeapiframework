@@ -1,0 +1,28 @@
+{
+  "name": "updatedns",
+  "version": "1.0.0",
+  "description": "Update AWS DNS",
+  "main": "index.js",
+  "dependencies": {
+    "@types/node": "^12.0.4",
+    "angular": "latest",
+    "angular-cookies": "latest",
+    "angular-route": "latest",
+    "aws-sdk": "latest",
+    "bootstrap": "^3.4.1",
+    "express": "^4.17.1",
+    "jquery": "^3.4.1",
+    "ldapjs": "^1.0.2",
+    "mssql": "^5.1.0",
+    "mysql": "^2.17.1",
+    "tedious": "^6.2.0",
+    "utf8": "^3.0.0"
+  },
+  "author": "nick.aiello@contractor.mitel.com",
+  "license": "ISC",
+  "scripts": {
+    "build": "tsc @ts-files.txt",
+    "prebuild": "dir *.ts /b /s > ts-files.txt",
+    "postbuild": "del ts-files.txt"
+  }
+}

@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Update DNS</title>
+    <script src="node_modules/angular/angular.js"></script>
+    <script src="node_modules/angular-cookies/angular-cookies.js"></script>
+    <script src="node_modules/jquery/dist/jquery.min.js"></script>
+    <script src="./index.js"></script>
+    <style>
+        pre {
+            white-space: pre-wrap;
+            word-wrap: break-word
+        }
+
+        table {
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            border: 1px solid grey;
+            padding: 5px;
+        }
+
+        table tr:nth-child(odd) {
+            background-color: #f1f1f1;
+        }
+
+        table tr:nth-child(even) {
+            background-color: #fffffF;
+        }
+
+        .rowModifierButtonsGroup button {
+            background-color: white;
+            border: 2px solid black;
+            color: black;
+            padding: 10px 24px;
+            cursor: pointer;
+            float: left;
+        }
+
+        .rowModifierButtonsGroup button:not(:last-child) {
+            border-right: none;
+        }
+
+        .rowModifierButtonsGroup:after {
+            content: "";
+            clear: both;
+            display: table;
+        }
+
+        .rowModifierButtonsGroup button:hover {
+            background-color: blue;
+            color: white;
+            border: 2px solid blue;
+        }
+
+        .recordsButt button {
+            background-color: white;
+            border: 2px solid black;
+            color: black;
+            padding: 10px 24px;
+            cursor: pointer;
+        }
+
+        .recordsButt button:hover {
+            background-color: blue;
+            color: white;
+            border: 2px solid blue;
+        }
+
+        .rightSideButton {
+            float: right;
+        }
+    </style>
+</head>
+
+<body ng-app="awsdns">
+    <div ng-controller="auth">
+        <div ng-style="authstyle">
+            <div class="rowModifierButtonsGroup">
+                <form ng-submit="login()">
+                    <label>{{autherrormsg}}</label>
+                    <table>
+                        <TR>
+                            <TD><label>Username:</label></TD>
+                            <TD><input ng-model="username"></TD>
+                        </TR>
+                        <TR>
+                            <TD><label>Password:</label></TD>
+                            <TD><input type="password" ng-model="password"></TD>
+                        </TR>
+                    </table>
+                    <button (click)="login()">Login</button>
+                </form>
+                <form ng-submit="resetPassword()">
+                    <button (click)="resetPassword()">Reset Password</button>
+                </form>
+            </div>
+        </div>
+        <div ng-style="mainstyle">
+            <div name="updatedns" id="updatedns" ng-controller="updatedns">
+                <label>{{updatednserrormsg}}</label>
+                <H2>Update DNS</H3>
+                <div ng-style="importdatastyle" style="display:none">
+                    <p>One entry per line. Provide full FQDN. Cannot specify target.<BR></p>
+                    <textarea ng-model="importDataContents" class="importarea"></textarea>
+                    <div class="rowModifierButtonsGroup">
+                        <form name="changesform" ng-submit="submitImportData()">
+                            <button (click)="submitImportData()">Import</button>
+                        </form>
+                        <form name="changesform" ng-submit="returnFromImport()">
+                            <button (click)="returnFromImport()">Cancel</button>
+                        </form>
+                    </div>
+                </div>
+                <BR>
+                <textarea ng-model="errordata" hidden readonly></textarea>
+                <div ng-style="tableregion">
+                    <div class="rowModifierButtonsGroup">
+                        <form name="changesform" ng-submit="addrow()">
+                            <button (cick)="addrow()">+Add Row</button>
+                        </form>
+                        <form name="changesform" ng-submit="removerow()">
+                            <button (click)="removerow()">-Remove Row</button>
+                        </form>
+                        <form name="changesform" ng-submit="importdata()">
+                            <button (click)="importdata()">Import Data</button>
+                        </form>
+                        <form name="changesform" ng-submit="CascadeTarget()">
+                            <button (click)="CascadeTarget()">Cascade First Target To All</button>
+                        </form>
+                    </div>
+                    <BR>
+                    <table id="updateTable" class="entrytable" ng-model="updateTable">
+                        <tr>
+                            <th>Name:</th>
+                            <th>Domain:</th>
+                            <th>Target:</th>
+                            <th>Target Domain:</th>
+
+                        </tr>
+                        <tr ng-repeat="lines in rows track by $index">
+                            <td><input type="text" id="c0r{{ lines.index }}" ng-model="lines.name"></td>
+                            <td>
+                                <select id="c1r{{ lines.index }}" ng-model="lines.selectedDomain">
+                                    <option ng-repeat="x in zones" value="{{ x.Id }}">
+                                        {{ x.Name }}
+                                    </option>
+                                </select>
+                            </td>
+                            <td><input type="text" id="c2r{{ lines.index }}" ng-model="lines.target"></td>
+                            <td>
+                                <select id="c3r{{ lines.index }}" ng-model="lines.selectedTargetDomain">
+                                    <option value="ipaddr">
+                                        IP Address
+                                    </option>
+                                    <option ng-repeat="x in zones" value="{{ x.Id }}">
+                                        {{ x.Name }}
+                                    </option>
+                                </select>
+                            </td>
+                        </tr>
+                    </table>
+
+                    <div class="rowModifierButtonsGroup">
+                        <form ng-submit="updateRecords()">
+                            <button (click)="updateRecords()">Update Records</button>
+                        </form>
+                    </div>
+                </div>
+
+                <br />
+                <br />
+                <div name="resourceRecords" id="resourceRecords" ng-controller="resourceRecords">
+                    <label>{{getrecordserrormsg}}</label>
+                    <form ng-submit="getRecords()">
+                        <div class="recordsButt">
+                            <select ng-model="zoneId">
+                                <option ng-repeat="x in zones" value="{{ x.Id }}">
+                                    {{ x.Name }}
+                                </option>
+                            </select>
+
+                            <button (click)="getRecords()">Get Records</button>
+                        </div>
+                    </form>
+                    <table>
+                        <tr>
+                            <th>Name:</th>
+                            <th>Target:</th>
+                            <th>Type:</th>
+                            <th>TTL:</th>
+                        </tr>
+                        <tr ng-repeat="x in records">
+                            <td>{{ x.Name }}</td>
+                            <td>{{ x.Target }}</td>
+                            <td>{{ x.Type }}</td>
+                            <td>{{ x.TTL }}</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

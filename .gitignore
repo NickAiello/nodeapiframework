@@ -1,0 +1,9 @@
+node_modules
+web.config
+.cache
+.npm
+build
+daemon
+apiserver/sqlconfig.json
+apiserver/opts.json
+apiserver/ldapauth.js

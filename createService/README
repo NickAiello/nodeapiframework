@@ -1,0 +1,29 @@
+INSTALL:
+    Command Structure:
+    # node index.js install <ServiceDisplayName> <PathToScriptFile> <OptionalDescription>
+    ServiceDisplayName = The display name property to be listed in the Windows services list
+    PathToScriptFile = The path to the javascript file
+
+    The "daemon" directory will be create in the same directory as your source code file specificed in the <PathToScriptFile>
+
+    Installing does not always work perfectly with permissions. You may need to modify how the service runs after it is installed.
+    1. open windows services
+    2. Locate the service by the display name you set
+    3. Right click -> properties
+    4. Log On tab
+    5. Select "This Account" and browse for the local admin account or desired service account
+    6. enter the password for the chosen account
+
+    Example:
+    # node index.js install APIToolServer ..\apiserver\index.js
+
+Uninstall:
+    Command structure:
+    # node index.js uninstall <ServiceDisplayName> <FilePathToDaemonDirectory>
+    ServiceDisplayName = The display name property listed in the Windows services list
+    FilePathToDaemonDirectory = The path to a directory named Daemon, likely where the source code is located
+                                For example, if code is at C:\temp\mycode\index.js
+                                The daemon directory is likely at C:\temp\mycode\daemon
+
+    Example:
+    # node index.js uninstall APIToolServer ..\apiserver\daemon

@@ -1,0 +1,15 @@
+{
+  "name": "createservice",
+  "version": "1.0.0",
+  "description": "Create a local service",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "nick.aiello@contractor.mitel.com",
+  "license": "ISC",
+  "dependencies": {
+    "node-windows": "^0.1.14",
+    "path": "^0.12.7"
+  }
+}

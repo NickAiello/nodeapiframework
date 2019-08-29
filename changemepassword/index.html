@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Changemypassword</title>
+    <script src="node_modules/angular/angular.js"></script>
+    <script src="./index.js"></script>
+    <style>
+        pre {
+            white-space: pre-wrap;
+            word-wrap: break-word
+        }
+
+        table,
+        th,
+        td {
+            border: 1px solid grey;
+            border-collapse: collapse;
+            padding: 5px;
+        }
+
+        table tr:nth-child(odd) {
+            background-color: #f1f1f1;
+        }
+
+        table tr:nth-child(even) {
+            background-color: #fffffF;
+        }
+
+        .rowModifierButtonsGroup button {
+            background-color: blue;
+            border: 1px solid black;
+            color: white;
+            padding: 10px 24px;
+            cursor: pointer;
+            float: left;
+        }
+
+        .rowModifierButtonsGroup button:not(:last-child) {
+            border-right: none;
+        }
+
+        .rowModifierButtonsGroup:after {
+            content: "";
+            clear: both;
+            display: table;
+        }
+
+        .rowModifierButtonsGroup button:hover {
+            background-color: #3e8e41;
+        }
+
+        .recordsButt button {
+            background-color: blue;
+            border: 1px solid black;
+            color: white;
+            padding: 10px 24px;
+            cursor: pointer;
+        }
+
+        .recordsButt button:hover {
+            background-color: #3e8e41;
+        }
+
+        .rightSideButton {
+            float: right;
+        }
+    </style>
+</head>
+
+<body ng-app="passwordupdate">
+    <div ng-controller="base">
+        <H1>Update your password for all tools available through tools.qa.shoretel.com</H1>
+        <form class="rowModifierButtonsGroup" ng-submit="Update()">
+            <h3>{{autherrormsg}}</h3>
+            <table>
+                <TR>
+                    <TD><label>Username:</label></TD>
+                    <TD><input ng-model="username"></TD>
+                </TR>
+                <TR>
+                    <TD><label>Current Password:</label></TD>
+                    <TD><input type="password" ng-model="currentpassword"></TD>
+                </TR>
+                <TR>
+                    <TD><label>New Password:</label></TD>
+                    <TD><input type="password" ng-model="newpassword"></TD>
+                </TR>
+                <TR>
+                    <TD><label>Confirm New Password:</label></TD>
+                    <TD><input type="password" ng-model="confirmpassword"></TD>
+                </TR>
+            </table>
+            <button (click)="Update()">Update password</button>
+        </form>
+    </div>
+</body>
