@@ -10,7 +10,7 @@
     "angular-route": "latest",
     "aws-sdk": "latest",
     "bootstrap": "^3.4.1",
-    "express": "^4.17.1",
+    "express": "^4.17.3",
     "jquery": "^3.4.1",
     "ldapjs": "^1.0.2",
     "mssql": "^5.1.0",
